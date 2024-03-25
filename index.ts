@@ -12,7 +12,13 @@ async function bootstrap() {
   const PORT = process.env.PORT || 8080;
 
   app.use(express.json());
-  app.use(cors<Request>());
+  app.use(
+    cors<Request>({
+      origin: "*",
+      credentials: true,
+      allowedHeaders: "*",
+    })
+  );
   app.use(express.urlencoded({ extended: true }));
 
   //   app.get("/", (req: Request, res: Response) => {
@@ -21,11 +27,9 @@ async function bootstrap() {
 
   app.use(waitlistRouter);
   app.use(mailerRouter);
-await connectToDB();
+  await connectToDB();
   app.listen(env.PORT, async () => {
-
     console.log(`⚡️[server]: Server is running @ http://localhost:${PORT}`);
-    
   });
 }
 bootstrap();
