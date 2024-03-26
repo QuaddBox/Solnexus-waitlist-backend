@@ -18,19 +18,25 @@ export const send = async (
   subject: string,
   body: any
 ) => {
-  const res = await transport.sendMail({
-    from,
-    to,
-    subject,
-    text: body,
-  });
-  if (res.accepted && !res.rejected) {
-    return {
-      message: "Mail sent successfully:" + res.messageId,
-      success: true,
-    };
-  }
-  return { message: "Error occured sending mail", success: false };
+ try {
+   const res = await transport.sendMail({
+			from,
+			to,
+			subject,
+			text: body,
+		});
+    
+		if (res.accepted) {
+			return {
+				message: "Mail sent successfully:" + res.messageId,
+				success: true,
+			};
+		}
+		return { message: "Error occured sending mail", success: false };
+ } catch (e) {
+  console.error(e)
+ }
+
 };
 export const sendMany = async (
   from: string,

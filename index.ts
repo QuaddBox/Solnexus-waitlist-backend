@@ -21,10 +21,11 @@ async function bootstrap() {
 
   app.use(waitlistRouter);
   app.use(mailerRouter);
-
+await connectToDB();
   app.listen(env.PORT, async () => {
+
     console.log(`⚡️[server]: Server is running @ http://localhost:${PORT}`);
-    await connectToDB();
+    
   });
 }
 bootstrap();

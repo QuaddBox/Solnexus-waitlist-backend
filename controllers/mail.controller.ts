@@ -12,10 +12,12 @@ const sendMailToAllWaitlistUsers = async (
 ) => {
   const { from, subject, body } = req.body;
   if (!from || !subject || !body) {
-    return "Fill all fields";
+    return res.status(402).json({message:"Fill all fields"});
   }
   const all = (await Waitlist.find()).map((waitlister) => waitlister.email);
   const messages = await sendMany(from, all, subject, body);
+  console.log(messages);
+  
   const failed = messages.filter((message) => message.success == false).length;
   const succeded = messages.filter((message) => message.success == true).length;
   return res.status(200).send({ succeded, failed });
