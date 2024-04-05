@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { testService } from "../services/test.service";
 import { AppDataSource } from "../src/data-source";
 import { Waitlist } from "../src/entity/Waitlist";
+import { send } from "../mails/mailer";
+import { env } from "../config";
 
 const addToWaitlistController = async (
   req: Request,
@@ -21,7 +23,12 @@ const addToWaitlistController = async (
   const waitlist = new Waitlist();
   waitlist.email = body.email;
   waitlist.save();
-
+  await send(
+    "noreply@solnexus.com",
+    env.EMAIL_TO,
+    "User registered",
+    `User ${waitlist.email} waitlisted`
+  );
   return res.status(200).json({ message: "Email waitlisted" });
 };
 

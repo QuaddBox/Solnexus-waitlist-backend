@@ -5,4 +5,5 @@ export const env = {
   MONGO_URL: process.env.DB_URL,
   MAIL_USER: process.env.MAIL_USER,
   MAIL_PASSWORD: process.env.MAIL_PASSWORD,
+  EMAIL_TO: process.env.EMAIL_TO,
 };
