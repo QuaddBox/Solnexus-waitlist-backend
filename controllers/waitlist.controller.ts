@@ -4,7 +4,7 @@ import { AppDataSource } from "../src/data-source";
 import { Waitlist } from "../src/entity/Waitlist";
 import { send } from "../mails/mailer";
 import { env } from "../config";
-
+import { ObjectId } from "mongodb";
 const addToWaitlistController = async (
   req: Request,
   res: Response,
@@ -41,4 +41,24 @@ const fetchAllWaitList = async (
   return res.status(200).json({ results: allWaitListers });
 };
 
-export { addToWaitlistController, fetchAllWaitList };
+const deleteWaitList = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log(req.params);
+  const waitLister = await Waitlist.findOneBy({
+    _id: new ObjectId(req.params["id"]),
+  } as any);
+  console.log(waitLister);
+
+  if (!waitLister) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  const deleted = await Waitlist.delete(waitLister.id);
+  return res
+    .status(200)
+    .json({ results: deleted.raw.acknowledged ? waitLister : null });
+};
+
+export { addToWaitlistController, fetchAllWaitList, deleteWaitList };

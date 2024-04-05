@@ -11,8 +11,8 @@ import {
 
 @Entity()
 export class Waitlist extends BaseEntity {
-  @ObjectIdColumn()
-  id: number;
+  @ObjectIdColumn({})
+  id: ObjectId;
   @Column()
   @Index({ unique: true })
   email: string;
